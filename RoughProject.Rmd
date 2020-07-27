@@ -1,0 +1,40 @@
+---
+title: "Rough Project"
+author: "Sierra Davis"
+date: "July 27, 2020"
+output: html_document
+---
+
+```{python}
+#Goals for the project is to write a code block that can be integrated into the Genesys kineticsgui.py program to create graphs based on csv files created by another program in the repository using matplotlib
+
+
+#this is what I have thus far concluded about integrating
+#matplotlib and the beginnings of how to graph some data
+#both matplotlib, pandas and scipy are required
+from matplotlib import pyplot as plt 
+#from scipy.stats import linregress
+#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg #not utilized yet but will likely be necessary later
+#from matplotlib.figure import Figure #also for later improvements
+import pandas #makes reading csv easier than importing csv
+
+x=[] #establishes the x variable as an empty list 
+y=[] #establishes the y variable as an empty list 
+colnames = ['Reaction','Substrate','Vol','Time','Abs']
+data = pandas.read_csv('reverse.csv', names=colnames) #need to figure out how to allow csv name to be input by user
+time = data.Time.tolist() #adds the values from the csv file that corresponds to the time column to a list
+Abs = data.Abs.tolist() #adds the values from the csv file that corresponds to the absorbance column to a list
+x, y = (time, Abs) #sets values from the time column as the x list, and the values from the Abs column as the y list
+plt.plot(x,y, marker='o') #plots the x and y values and sets a marker for each coordinate point
+plt.title('Absorbance over Time') #as the absorbance readings from the spectrophotometer are recorded with a time stamp
+plt.xlabel('Time of Reading') #label for the x axis
+plt.ylabel('Sample Absorbance') #label for the y axis
+plt.show() #displays the plot built in previous lines
+
+
+#resources include:
+#https://stackoverflow.com/questions/19486369/extract-csv-file-specific-columns-to-list-in-python
+#https://docs.python.org/3/library/csv.html
+#https://stackoverflow.com/questions/42372617/how-to-plot-csv-data-using-matplotlib-and-pandas-in-python
+```
+
