@@ -1,0 +1,88 @@
+---
+title: "Project Notebook"
+author: "Sierra Davis"
+date: "July 27, 2020"
+output: html_document
+---
+
+```{python}
+#Goals for the project is to write a code block that can be integrated into the Genesys kineticsgui.py program to create graphs based on csv files created by another program in the repository using matplotlib
+#when inserting into the kineticsgui.py, some import and from commands can be uncommented from #the beginning of the code and some would need to be added
+
+#matplotlib, pandas, tkinter, and scipy are required
+import matplotlib
+import tkinter
+matplotlib.use("TkAgg") #makes Agg rendering to a Tk canvas
+from matplotlib import pyplot as plt #improves matplotlib interaction by adding command style functions
+from scipy.stats import linregress #linregress enables program to calculate a linear least-squares regression for two sets of measurements
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.figure import Figure 
+import pandas #makes reading csv easier than importing csv
+
+#root = tkinter.Tk()
+#root.wm_title("Embedding in Tk")
+
+#matplotlib.axes.Axes.set_autoscalex_on
+#matplotlib.axes.Axes.set_autoscaley_on
+#fig = Figure(dpi=100)
+#canvas = FigureCanvasTkAgg(fig, master=root)  ## A tk.DrawingArea.
+#canvas.draw()
+## pack_toolbar=False will make it easier to use a layout manager later on.
+#toolbar = NavigationToolbar2Tk (canvas, root, pack_toolbar=False)
+#toolbar.update()
+
+
+#canvas.mpl_connect(
+#    "key_press_event", lambda event: print(f"you pressed {event.key}"))
+#canvas.mpl_connect("key_press_event", key_press_handler)
+
+#button = tkinter.Button(master=root, text="Quit", command=root.quit) 
+#button.pack(side=tkinter.BOTTOM)
+#toolbar.pack(side=tkinter.BOTTOM, fill=tkinter.X)
+#canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=1)
+##the above section was the beginnings of how to establish figures using matplotlib instead of a problematic graph
+#these lines are almost directly taken from the matplotlib website
+#https://matplotlib.org/gallery/user_interfaces/embedding_in_tk_sgskip.html#sphx-glr-gallery-user-interfaces-embedding-in-tk-sgskip-py
+
+file_name = input("Enter csv filename: ") #allows user to enter desired csv filename
+if len(file_name) == 0:
+  print("Please enter a filename") #a message in the event no filename is provided
+  sys.exit()
+try:
+  file = open(file_name, "r") #this command tries to read the file of the provided name
+except IOError:
+  print("There was an error reading file") #prints an error message if the file is unable to be read
+  
+colnames = ['Reaction','Substrate','Vol','Time','Abs']
+data = pandas.read_csv(file_name, names=colnames) #need to figure out how to allow csv name to be input by user
+Reaction = data.Reaction.tolist() #makes a list of reaction numbers per row 
+#for n in Reaction: #to be refined
+#  if Reaction[n] == Reaction[n + 1] - 1: #adds a condition to compare the reaction number of the current row in the list to the previous one ##need to fix
+time = data.Time.tolist() #adds the values from the csv file that corresponds to the time column to a list
+Abs = data.Abs.tolist() #adds the values from the csv file that corresponds to the absorbance column to a list
+x, y = (time, Abs) #sets values from the time column as the x list, and the values from the Abs column as the y list
+plt.plot(x,y, marker='o') #plots the x and y values and sets a marker for each coordinate point 
+#    n + 1 #increasing the number after the execution of the previous lines ensures the loop will end once there is no Reaction[n] value in the Reaction list
+#else: #if the reaction number changes, this section will activate to change the line color
+#  r = random.random() #defines a variable r with a random number
+#  g = random.random() #defines a variable g with a random number
+#  b = random.random() #defines a variable b with a random number
+#  color = ( r, g, b) ##defines a variable color with the random values for red green and blue
+#  plt.plot(c=color) ##assigns the random generated color to the line of the graph
+  ##this currently is broken, but when fixed would help to differentiate the ##results from different reactions listed in the same csv file, by having results
+##from different reactions graphed in different colors
+plt.title('Absorbance over Time') #as the absorbance readings from the spectrophotometer are recorded with a time stamp
+plt.xlabel('Time of Reading') #label for the x axis
+plt.ylabel('Sample Absorbance') #label for the y axis
+plt.show() #displays the plot built in previous lines
+
+#Much of the code is unperfected ideas on how to enhance the code to produce more meaningful graphs, 
+#however, due to the imperfections within those sections and the incompletion of the attempt to integrate the 
+#matplotlib figure dimensions/uses, they have been commented out for the time being with the intent to leave the beginnings of improvements that have not reached
+#fruition at this time. Those comments with two pound symbols denote the intent or function of the inactive lines of code
+#resources include:
+#https://stackoverflow.com/questions/19486369/extract-csv-file-specific-columns-to-list-in-python
+#https://docs.python.org/3/library/csv.html
+#https://stackoverflow.com/questions/42372617/how-to-plot-csv-data-using-matplotlib-and-pandas-in-python
+```
+
